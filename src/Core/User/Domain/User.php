@@ -5,9 +5,12 @@ namespace App\Core\User\Domain;
 use App\Common\EventManager\EventsCollectorTrait;
 use Doctrine\ORM\Mapping as ORM;
 
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="users")
+ * @UniqueEntity("email")
  */
 class User
 {
@@ -21,7 +24,7 @@ class User
     private ?int $id;
 
     /**
-     * @ORM\Column(type="string", length=300, nullable=false)
+     * @ORM\Column(type="string", length=300, nullable=false, unique=true)
      */
     private string $email;
 
@@ -30,11 +33,11 @@ class User
      */
     private ?bool $active;
 
-    public function __construct(string $email)
+    public function __construct(string $email, $active = false)
     {
         $this->id = null;
         $this->email = $email;
-        $this->active = null;
+        $this->active = $active;
     }
 
     public function getEmail(): string
